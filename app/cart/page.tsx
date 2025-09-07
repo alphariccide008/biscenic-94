@@ -37,27 +37,24 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 md:py-12 md:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl md:text-5xl font-light text-center mb-8 md:mb-10 tracking-wider">YOUR SHOPPING CART</h1>
+        <h1 className="text-4xl md:text-5xl font-light text-center mb-10 tracking-wider">YOUR SHOPPING CART</h1>
 
         {cart.length === 0 ? (
-          <div className="text-center py-10 md:py-20">
-            <p className="text-lg md:text-xl text-gray-600 mb-4 md:mb-6">Your cart is empty.</p>
-            <Button className="bg-black text-white hover:bg-gray-800 px-6 py-3" onClick={() => router.push("/shop")}>
+          <div className="text-center py-20">
+            <p className="text-xl text-gray-600 mb-6">Your cart is empty.</p>
+            <Button className="bg-black text-white hover:bg-gray-800" onClick={() => router.push("/shop")}>
               Continue Shopping
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Cart Items */}
-            <div className="lg:col-span-2 bg-white p-4 md:p-6 rounded-lg shadow-md space-y-4 md:space-y-6">
+            <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md space-y-6">
               {cart.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col sm:flex-row items-center border-b pb-4 last:border-b-0 last:pb-0"
-                >
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0">
+                <div key={item.id} className="flex items-center border-b pb-4 last:border-b-0 last:pb-0">
+                  <div className="relative w-24 h-24 mr-4 flex-shrink-0">
                     <Image
                       src={item.image || "/placeholder.svg?height=100&width=100&query=cart item"}
                       alt={item.name}
@@ -65,31 +62,31 @@ export default function CartPage() {
                       className="object-cover rounded-md"
                     />
                   </div>
-                  <div className="flex-grow text-center sm:text-left mb-4 sm:mb-0">
-                    <h2 className="text-base md:text-lg font-medium">{item.name}</h2>
-                    <p className="text-gray-600 text-xs md:text-sm">{item.category}</p>
-                    <p className="text-gray-800 font-semibold mt-1 text-base md:text-lg">{item.price}</p>
+                  <div className="flex-grow">
+                    <h2 className="text-lg font-medium">{item.name}</h2>
+                    <p className="text-gray-600 text-sm">{item.category}</p>
+                    <p className="text-gray-800 font-semibold mt-1">{item.price}</p>
                   </div>
-                  <div className="flex items-center space-x-2 sm:space-x-4">
+                  <div className="flex items-center space-x-4">
                     <Input
                       type="number"
                       min="1"
                       value={item.quantity}
                       onChange={(e) => handleQuantityChange(item.id, e.target.value)}
-                      className="w-16 sm:w-20 text-center border-gray-300 focus:border-black"
+                      className="w-20 text-center border-gray-300 focus:border-black"
                     />
                     <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)}>
-                      <Trash2 className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
+                      <Trash2 className="h-5 w-5 text-red-500" />
                       <span className="sr-only">Remove item</span>
                     </Button>
                   </div>
                 </div>
               ))}
-              <div className="flex justify-center sm:justify-end pt-4">
+              <div className="flex justify-end pt-4">
                 <Button
                   variant="outline"
                   onClick={clearCart}
-                  className="border-black text-black hover:bg-black hover:text-white bg-transparent px-6 py-3"
+                  className="border-black text-black hover:bg-black hover:text-white bg-transparent"
                 >
                   Clear Cart
                 </Button>
@@ -97,9 +94,9 @@ export default function CartPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="lg:col-span-1 bg-white p-4 md:p-6 rounded-lg shadow-md h-fit lg:sticky lg:top-24">
-              <h2 className="text-xl md:text-2xl font-light mb-4 md:mb-6 tracking-wide">ORDER SUMMARY</h2>
-              <div className="space-y-2 md:space-y-3 text-gray-700 text-sm md:text-base">
+            <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit sticky top-24">
+              <h2 className="text-2xl font-light mb-6 tracking-wide">ORDER SUMMARY</h2>
+              <div className="space-y-3 text-gray-700">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span>${calculateSubtotal().toFixed(2)}</span>
@@ -108,13 +105,13 @@ export default function CartPage() {
                   <span>Shipping</span>
                   <span>FREE</span> {/* Placeholder */}
                 </div>
-                <div className="flex justify-between font-bold text-base md:text-lg border-t pt-3 mt-3">
+                <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
                   <span>Total</span>
                   <span>${calculateSubtotal().toFixed(2)}</span>
                 </div>
               </div>
               <Button
-                className="w-full bg-black text-white hover:bg-gray-800 mt-6 md:mt-8 py-3 text-base md:text-lg"
+                className="w-full bg-black text-white hover:bg-gray-800 mt-8 py-3"
                 onClick={handleWhatsAppCheckout}
               >
                 PROCEED TO CHECKOUT VIA WHATSAPP

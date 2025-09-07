@@ -34,27 +34,27 @@ export default function Exhibition() {
   // Memoized navigation functions
   const nextSlide1 = useCallback(() => {
     setCurrentSlide1((prev) => (prev + 1) % carouselImages1.length)
-  }, [carouselImages1.length])
+  }, [])
 
   const prevSlide1 = useCallback(() => {
     setCurrentSlide1((prev) => (prev - 1 + carouselImages1.length) % carouselImages1.length)
-  }, [carouselImages1.length])
+  }, [])
 
   const nextSlide2 = useCallback(() => {
     setCurrentSlide2((prev) => (prev + 1) % carouselImages2.length)
-  }, [carouselImages2.length])
+  }, [])
 
   const prevSlide2 = useCallback(() => {
     setCurrentSlide2((prev) => (prev - 1 + carouselImages2.length) % carouselImages2.length)
-  }, [carouselImages2.length])
+  }, [])
 
   const nextSlide3 = useCallback(() => {
     setCurrentSlide3((prev) => (prev + 1) % carouselImages3.length)
-  }, [carouselImages3.length])
+  }, [])
 
   const prevSlide3 = useCallback(() => {
     setCurrentSlide3((prev) => (prev - 1 + carouselImages3.length) % carouselImages3.length)
-  }, [carouselImages3.length])
+  }, [])
 
   // Auto-slide effect for carousel 1
   useEffect(() => {
@@ -67,15 +67,15 @@ export default function Exhibition() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="bg-black text-white py-8 md:py-10 pb-0">
+      <section className="bg-black text-white py-10 pb-0">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-light mb-4 md:mb-6 tracking-wider">EXHIBITION</h1>
+          <h1 className="text-3xl md:text-5xl font-light mb-6 tracking-wider">EXHIBITION</h1>
         </div>
       </section>
 
       {/* Carousel 1 */}
       <section
-        className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden"
+        className="relative w-full h-[70vh] overflow-hidden"
         onMouseEnter={() => setIsHovered1(true)}
         onMouseLeave={() => setIsHovered1(false)}
       >
@@ -92,33 +92,34 @@ export default function Exhibition() {
               fill
               className="object-cover"
               priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
               sizes="100vw"
             />
           </div>
         ))}
 
         <button
-          className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered1 ? "opacity-100" : "opacity-0"}`}
+          className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered1 ? "opacity-100" : "opacity-0"}`}
           onClick={prevSlide1}
           aria-label="Previous slide"
         >
-          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
 
         <button
-          className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered1 ? "opacity-100" : "opacity-0"}`}
+          className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered1 ? "opacity-100" : "opacity-0"}`}
           onClick={nextSlide1}
           aria-label="Next slide"
         >
-          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronRight className="h-6 w-6" />
         </button>
 
         {/* Image Previews */}
-        <div className="absolute inset-x-0 bottom-2 md:bottom-4 flex justify-center space-x-1 md:space-x-2 z-20">
+        <div className="absolute inset-x-0 bottom-4 flex justify-center space-x-2 z-20">
           {carouselImages1.map((imageSrc, index) => (
             <button
               key={index}
-              className={`relative h-12 w-16 md:h-16 md:w-24 overflow-hidden rounded-md border-2 transition-all duration-300 ${
+              className={`relative h-16 w-24 overflow-hidden rounded-md border-2 transition-all duration-300 ${
                 index === currentSlide1
                   ? "border-white scale-105 shadow-[0_0_10px_5px_rgba(255,255,255,0.5)]"
                   : "border-transparent opacity-70 hover:opacity-100"
@@ -131,7 +132,8 @@ export default function Exhibition() {
                 alt={`Preview ${index + 1}`}
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 64px, 96px"
+                loading="lazy"
+                sizes="96px"
               />
             </button>
           ))}
@@ -140,7 +142,7 @@ export default function Exhibition() {
 
       {/* Carousel 2 */}
       <section
-        className="bg-black relative w-full h-[60vh] md:h-[70vh] overflow-hidden"
+        className="bg-black relative w-full h-[70vh] overflow-hidden"
         onMouseEnter={() => setIsHovered2(true)}
         onMouseLeave={() => setIsHovered2(false)}
       >
@@ -156,32 +158,33 @@ export default function Exhibition() {
               alt={`Design Philosophy Slide ${index + 1}`}
               fill
               className="object-contain"
+              loading="lazy"
               sizes="100vw"
             />
           </div>
         ))}
 
         <button
-          className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered2 ? "opacity-100" : "opacity-0"}`}
+          className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered2 ? "opacity-100" : "opacity-0"}`}
           onClick={prevSlide2}
           aria-label="Previous slide"
         >
-          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
 
         <button
-          className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered2 ? "opacity-100" : "opacity-0"}`}
+          className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered2 ? "opacity-100" : "opacity-0"}`}
           onClick={nextSlide2}
           aria-label="Next slide"
         >
-          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronRight className="h-6 w-6" />
         </button>
 
-        <div className="absolute inset-x-0 bottom-2 md:bottom-4 flex justify-center space-x-1 md:space-x-2 z-20">
+        <div className="absolute inset-x-0 bottom-4 flex justify-center space-x-2 z-20">
           {carouselImages2.map((imageSrc, index) => (
             <button
               key={index}
-              className={`relative h-12 w-16 md:h-16 md:w-24 overflow-hidden rounded-md border-2 transition-all duration-300 ${
+              className={`relative h-16 w-24 overflow-hidden rounded-md border-2 transition-all duration-300 ${
                 index === currentSlide2
                   ? "border-white scale-105 shadow-[0_0_10px_5px_rgba(255,255,255,0.5)]"
                   : "border-transparent opacity-70 hover:opacity-100"
@@ -194,7 +197,8 @@ export default function Exhibition() {
                 alt={`Preview ${index + 1}`}
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 64px, 96px"
+                loading="lazy"
+                sizes="96px"
               />
             </button>
           ))}
@@ -203,7 +207,7 @@ export default function Exhibition() {
 
       {/* Carousel 3 */}
       <section
-        className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden bg-black"
+        className="relative w-full h-[70vh] overflow-hidden bg-black"
         onMouseEnter={() => setIsHovered3(true)}
         onMouseLeave={() => setIsHovered3(false)}
       >
@@ -219,32 +223,33 @@ export default function Exhibition() {
               alt={`Innovation Slide ${index + 1}`}
               fill
               className="object-contain"
+              loading="lazy"
               sizes="100vw"
             />
           </div>
         ))}
 
         <button
-          className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered3 ? "opacity-100" : "opacity-0"}`}
+          className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered3 ? "opacity-100" : "opacity-0"}`}
           onClick={prevSlide3}
           aria-label="Previous slide"
         >
-          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
 
         <button
-          className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered3 ? "opacity-100" : "opacity-0"}`}
+          className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white bg-opacity-30 rounded-full text-black hover:bg-opacity-50 transition-opacity duration-300 ${isHovered3 ? "opacity-100" : "opacity-0"}`}
           onClick={nextSlide3}
           aria-label="Next slide"
         >
-          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronRight className="h-6 w-6" />
         </button>
 
-        <div className="absolute inset-x-0 bottom-2 md:bottom-4 flex justify-center space-x-1 md:space-x-2 z-20">
+        <div className="absolute inset-x-0 bottom-4 flex justify-center space-x-2 z-20">
           {carouselImages3.map((imageSrc, index) => (
             <button
               key={index}
-              className={`relative h-12 w-16 md:h-16 md:w-24 overflow-hidden rounded-md border-2 transition-all duration-300 ${
+              className={`relative h-16 w-24 overflow-hidden rounded-md border-2 transition-all duration-300 ${
                 index === currentSlide3
                   ? "border-white scale-105 shadow-[0_0_10px_5px_rgba(255,255,255,0.5)]"
                   : "border-transparent opacity-70 hover:opacity-100"
@@ -257,7 +262,8 @@ export default function Exhibition() {
                 alt={`Preview ${index + 1}`}
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 64px, 96px"
+                loading="lazy"
+                sizes="96px"
               />
             </button>
           ))}
@@ -265,24 +271,19 @@ export default function Exhibition() {
       </section>
 
       {/* Brand Story Section */}
-      <section className="py-12 md:py-20">
+      <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-light mb-6 md:mb-8 tracking-wide text-white">
-            CRAFTSMANSHIP & INNOVATION
-          </h2>
-          <p className="text-base md:text-lg text-gray-300 leading-relaxed mb-6 md:mb-8">
+          <h2 className="text-3xl font-light mb-8 tracking-wide text-white">CRAFTSMANSHIP & INNOVATION</h2>
+          <p className="text-lg text-gray-300 leading-relaxed mb-8">
             Each piece in our exhibition represents months of meticulous design and craftsmanship. Our artisans combine
             traditional techniques with cutting-edge innovation to create pieces that are not just fashion, but wearable
             art.
           </p>
-          <p className="text-base md:text-lg text-gray-300 leading-relaxed mb-8 md:mb-12">
+          <p className="text-lg text-gray-300 leading-relaxed mb-12">
             From the initial sketch to the final stitch, every detail is considered, every material carefully selected,
             and every silhouette perfected to embody our vision of contemporary luxury.
           </p>
-          <Button
-            className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-sm md:px-12 md:py-4 md:text-base tracking-wide"
-            asChild
-          >
+          <Button className="bg-white text-black hover:bg-gray-200 px-12 py-4 text-sm tracking-wide" asChild>
             <Link href="/shop">SHOP NOW</Link>
           </Button>
         </div>

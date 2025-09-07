@@ -6,9 +6,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { CartProvider } from "@/context/cart-context"
-import { ChatbotProvider } from "@/context/chatbot-context"
-import { ChatbotModal } from "@/components/chatbot-modal"
-import { FloatingChatbotButton } from "@/components/floating-chatbot-button"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +23,7 @@ export const metadata: Metadata = {
     description: "Discover luxury fashion and home decor at BISCENIC",
     type: "website",
   },
-    generator: 'v0.dev'
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -43,13 +40,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <CartProvider>
-          <ChatbotProvider>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <ChatbotModal />
-            <FloatingChatbotButton />
-          </ChatbotProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
           <Toaster />
         </CartProvider>
       </body>

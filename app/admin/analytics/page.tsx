@@ -1,202 +1,321 @@
 "use client"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { DollarSign, Users, Eye, ShoppingBag } from "lucide-react"
+import { Line, LineChart, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, BarChart, Bar } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { useState, useEffect, useCallback } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-import { useState, useEffect } from "react"
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
-import { DollarSign, Users, CreditCard, Activity } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-interface AnalyticsData {
-  totalRevenue: string
-  subscriptions: string
-  sales: string
-  activeNow: string
-  overviewChart: { name: string; total: number }[]
-  recentSales: { name: string; email: string; amount: string }[]
-  topProducts: { name: string; sales: number }[]
-  salesByCategory: { name: string; sales: number }[]
+// Define types for the fetched data
+interface SummaryData {
+  totalRevenue: number
+  totalOrders: number
+  uniqueVisitors: number
+  totalPageViews: number
+  conversionRate: number
+  averageOrderValue: number
 }
 
-export default function AnalyticsPage() {
+interface DailyTrend {
+  date: string
+  revenue: number
+  visitors: number
+}
+
+interface PopularProduct {
+  name: string
+  sales: number
+  views: number
+  category: string
+  conversionRate: number
+  averageTimeOnPage: number
+}
+
+interface MonthlyTrend {
+  month: string
+  sales: number
+  clicks: number
+}
+
+interface AnalyticsData {
+  summary: SummaryData
+  dailyTrends: DailyTrend[]
+  popularProducts: PopularProduct[]
+  monthlyTrends: MonthlyTrend[]
+}
+
+export default function AdminAnalyticsPage() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [timeRange, setTimeRange] = useState("30d") // Default time range
+  const [productCategoryFilter, setProductCategoryFilter] = useState("all") // Default product category filter
+
+  const fetchAnalyticsData = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const params = new URLSearchParams({
+        timeRange: timeRange,
+        productCategory: productCategoryFilter,
+      }).toString()
+      const response = await fetch(`/api/analytics?${params}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data: AnalyticsData = await response.json()
+      setAnalyticsData(data)
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }, [timeRange, productCategoryFilter])
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await fetch("/api/analytics")
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data: AnalyticsData = await response.json()
-        setAnalyticsData(data)
-      } catch (e: any) {
-        setError(e.message)
-      } finally {
-        setLoading(false)
-      }
-    }
+    fetchAnalyticsData()
+  }, [fetchAnalyticsData])
 
-    fetchAnalytics()
-  }, [])
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF"]
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <p className="text-lg text-gray-600">Loading analytics data...</p>
+      </div>
+    )
+  }
 
   if (error) {
-    return <div className="text-center text-red-500 p-4">Error: {error}</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <p className="text-lg text-red-500">Error loading data: {error}</p>
+      </div>
+    )
   }
 
-  if (!analyticsData) {
-    return <div className="text-center p-4">No analytics data available.</div>
-  }
+  // Destructure data for easier access
+  const { summary, dailyTrends, popularProducts, monthlyTrends } = analyticsData!
 
   return (
-    <div className="flex flex-col gap-4 p-4 md:p-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData.totalRevenue}</div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">+20.1% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
-            <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData.subscriptions}</div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">+180.1% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sales</CardTitle>
-            <CreditCard className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData.sales}</div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">+19% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-            <Activity className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData.activeNow}</div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">+201 since last hour</p>
-          </CardContent>
-        </Card>
-      </div>
-      <Card className="col-span-4">
-        <CardHeader>
-          <CardTitle>Overview</CardTitle>
+    <div className="flex min-h-screen flex-col items-center bg-gray-100 px-4 py-12">
+      <Card className="w-full max-w-6xl shadow-lg">
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-3xl font-bold tracking-wide">Website Analytics</CardTitle>
+          <CardDescription>Monitor key performance indicators and user interactions.</CardDescription>
         </CardHeader>
-        <CardContent className="pl-2">
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={analyticsData.overviewChart}>
-              <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis
-                stroke="#888888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `$${value}`}
-              />
-              <Tooltip cursor={{ fill: "transparent" }} />
-              <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        <CardContent className="space-y-8">
+          {/* Filter Controls */}
+          <div className="flex flex-col md:flex-row gap-4 justify-end items-center">
+            {" "}
+            {/* Centered items */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">Time Range:</span> {/* Styled label */}
+              <Select value={timeRange} onValueChange={setTimeRange}>
+                <SelectTrigger className="w-[180px] border-gray-300 focus:border-black">
+                  {" "}
+                  {/* Refined trigger style */}
+                  <SelectValue placeholder="Select time range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="7d">Last 7 Days</SelectItem>
+                  <SelectItem value="30d">Last 30 Days</SelectItem>
+                  <SelectItem value="all">All Time</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">Product Category:</span> {/* Styled label */}
+              <Select value={productCategoryFilter} onValueChange={setProductCategoryFilter}>
+                <SelectTrigger className="w-[180px] border-gray-300 focus:border-black">
+                  {" "}
+                  {/* Refined trigger style */}
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="bags">Bags</SelectItem>
+                  <SelectItem value="shoes">Shoes</SelectItem>
+                  <SelectItem value="clothing">Clothing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Card className="p-6 text-center shadow-sm">
+              {" "}
+              {/* Added shadow */}
+              <DollarSign className="mx-auto h-8 w-8 text-green-600 mb-3" />
+              <h3 className="text-xl font-semibold mb-1">Total Revenue</h3>
+              <p className="text-2xl font-bold text-gray-800">${summary.totalRevenue.toLocaleString()}</p>{" "}
+              {/* Darker text */}
+            </Card>
+            <Card className="p-6 text-center shadow-sm">
+              <ShoppingBag className="mx-auto h-8 w-8 text-blue-600 mb-3" />
+              <h3 className="text-xl font-semibold mb-1">Total Orders</h3>
+              <p className="text-2xl font-bold text-gray-800">{summary.totalOrders.toLocaleString()}</p>
+            </Card>
+            <Card className="p-6 text-center shadow-sm">
+              <Users className="mx-auto h-8 w-8 text-purple-600 mb-3" />
+              <h3 className="text-xl font-semibold mb-1">Unique Visitors</h3>
+              <p className="text-2xl font-bold text-gray-800">{summary.uniqueVisitors.toLocaleString()}</p>
+            </Card>
+            <Card className="p-6 text-center shadow-sm">
+              <Eye className="mx-auto h-8 w-8 text-orange-600 mb-3" />
+              <h3 className="text-xl font-semibold mb-1">Total Page Views</h3>
+              <p className="text-2xl font-bold text-gray-800">{summary.totalPageViews.toLocaleString()}</p>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Card className="p-6 text-center shadow-sm">
+              <h3 className="text-xl font-semibold mb-2">Conversion Rate</h3>
+              <p className="text-2xl font-bold text-green-700">{summary.conversionRate.toFixed(2)}%</p>
+              <CardDescription>Percentage of visitors who made a purchase.</CardDescription>
+            </Card>
+            <Card className="p-6 text-center shadow-sm">
+              <h3 className="text-xl font-semibold mb-2">Average Order Value</h3>
+              <p className="text-2xl font-bold text-blue-700">${summary.averageOrderValue.toFixed(2)}</p>
+              <CardDescription>Average amount spent per order.</CardDescription>
+            </Card>
+          </div>
+
+          {/* Revenue and Visitors Trend Line Chart */}
+          <Card className="p-6 shadow-sm">
+            <h3 className="text-xl font-semibold mb-4 text-center">Daily Revenue & Visitors Trend</h3>
+            <ChartContainer
+              config={{
+                revenue: {
+                  label: "Revenue",
+                  color: "hsl(var(--chart-1))",
+                },
+                visitors: {
+                  label: "Visitors",
+                  color: "hsl(var(--chart-2))",
+                },
+              }}
+              className="h-[300px] w-full"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={dailyTrends} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis yAxisId="left" stroke="var(--color-revenue)" />
+                  <YAxis yAxisId="right" orientation="right" stroke="var(--color-visitors)" />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Legend />
+                  <Line yAxisId="left" type="monotone" dataKey="revenue" stroke="var(--color-revenue)" name="Revenue" />
+                  <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="visitors"
+                    stroke="var(--color-visitors)"
+                    name="Visitors"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Card>
+
+          {/* Popular Products Sales & Clicks Bar Chart */}
+          <Card className="p-6 shadow-sm">
+            <h3 className="text-xl font-semibold mb-4 text-center">Popular Products: Sales vs. Clicks</h3>
+            <ChartContainer
+              config={{
+                sales: {
+                  label: "Sales",
+                  color: "hsl(var(--chart-3))",
+                },
+                views: {
+                  label: "Clicks (Views)",
+                  color: "hsl(var(--chart-4))",
+                },
+              }}
+              className="h-[300px] w-full"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={popularProducts} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" angle={-15} textAnchor="end" interval={0} height={50} />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Legend />
+                  <Bar dataKey="sales" fill="var(--color-sales)" name="Units Sold" />
+                  <Bar dataKey="views" fill="var(--color-views)" name="Clicks (Views)" />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Card>
+
+          {/* Product Performance Table */}
+          <Card className="p-6 shadow-sm">
+            <h3 className="text-xl font-semibold mb-4 text-center">Product Performance Details</h3>
+            <div className="overflow-x-auto rounded-md border">
+              <Table>
+                <TableHeader className="bg-gray-50">
+                  <TableRow>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead className="text-right">Sales</TableHead>
+                    <TableHead className="text-right">Clicks (Views)</TableHead>
+                    <TableHead className="text-right">Conversion Rate</TableHead>
+                    <TableHead className="text-right">Avg. Time on Page (s)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {popularProducts.map((product) => (
+                    <TableRow key={product.name} className="hover:bg-gray-50 transition-colors">
+                      <TableCell className="font-medium">{product.name}</TableCell>
+                      <TableCell className="text-right">{product.sales}</TableCell>
+                      <TableCell className="text-right">{product.views}</TableCell>
+                      <TableCell className="text-right font-semibold text-green-700">
+                        {product.conversionRate.toFixed(2)}%
+                      </TableCell>{" "}
+                      {/* Highlighted conversion rate */}
+                      <TableCell className="text-right">{product.averageTimeOnPage}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            {popularProducts.length === 0 && (
+              <p className="text-center text-gray-500 mt-4">No product data available for the selected filters.</p>
+            )}
+          </Card>
+
+          {/* Monthly Sales and Clicks Trend Line Chart */}
+          {monthlyTrends.length > 0 && (
+            <Card className="p-6 shadow-sm">
+              <h3 className="text-xl font-semibold mb-4 text-center">Monthly Sales & Clicks Trend</h3>
+              <ChartContainer
+                config={{
+                  sales: {
+                    label: "Sales",
+                    color: "hsl(var(--chart-1))",
+                  },
+                  clicks: {
+                    label: "Clicks",
+                    color: "hsl(var(--chart-2))",
+                  },
+                }}
+                className="h-[300px] w-full"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={monthlyTrends} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis yAxisId="left" stroke="var(--color-sales)" />
+                    <YAxis yAxisId="right" orientation="right" stroke="var(--color-clicks)" />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Line yAxisId="left" type="monotone" dataKey="sales" stroke="var(--color-sales)" name="Sales" />
+                    <Line yAxisId="right" type="monotone" dataKey="clicks" stroke="var(--color-clicks)" name="Clicks" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </Card>
+          )}
         </CardContent>
       </Card>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Sales</CardTitle>
-            <CardDescription>You made {analyticsData.recentSales.length} sales this month.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-8">
-              {analyticsData.recentSales.map((sale, i) => (
-                <div key={i} className="flex items-center">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={`https://api.dicebear.com/7.x/avatars/svg?seed=${sale.name}`} alt="Avatar" />
-                    <AvatarFallback>
-                      {sale.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">{sale.name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{sale.email}</p>
-                  </div>
-                  <div className="ml-auto font-medium">{sale.amount}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Top Products</CardTitle>
-            <CardDescription>Best-selling products by sales volume.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={analyticsData.topProducts} layout="vertical" margin={{ left: 100, right: 20 }}>
-                <YAxis
-                  dataKey="name"
-                  type="category"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <XAxis type="number" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip cursor={{ fill: "transparent" }} />
-                <Bar dataKey="sales" fill="#8884d8" layout="vertical" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Sales by Category</CardTitle>
-            <CardDescription>Distribution of sales across different product categories.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={analyticsData.salesByCategory}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="sales"
-                  nameKey="name"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {analyticsData.salesByCategory.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   )
 }
