@@ -2,106 +2,129 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Loader2 } from "lucide-react"
 
-export default function SecureAdminPage() {
+export default function AdminLogin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  // Default admin credentials
-  const ADMIN_EMAIL = "admin@biscenic.com"
-  const ADMIN_PASSWORD = "admin123"
+  useEffect(() => {
+    // Check if already logged in
+    if (typeof window !== "undefined") {
+      const isLoggedIn = localStorage.getItem("adminLoggedIn")
+      if (isLoggedIn === "true") {
+        router.push("/admin/dashboard")
+      }
+    }
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError("")
+    setIsLoading(true)
 
     try {
-      // Simple authentication check
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        // Store admin session (in a real app, use proper authentication)
+      // Demo credentials
+      if (email === "admin@biscenic.com" && password === "admin123") {
         if (typeof window !== "undefined") {
           localStorage.setItem("adminLoggedIn", "true")
           localStorage.setItem("adminEmail", email)
         }
-
-        // Redirect to admin dashboard
         router.push("/admin/dashboard")
       } else {
-        setError("Invalid email or password. Please use the demo credentials shown below.")
+        setError("Invalid email or password. Please use the demo credentials.")
       }
-    } catch (err) {
+    } catch (error) {
       setError("An error occurred during login. Please try again.")
-      console.error("Login error:", err)
+    } finally {
+      setIsLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
-    <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-gray-950">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold">Admin Login</CardTitle>
-          <CardDescription>Enter your credentials to access the admin dashboard.</CardDescription>
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-800">
-            <p className="font-semibold mb-2">Demo Credentials:</p>
-            <p className="font-mono">Email: admin@biscenic.com</p>
-            <p className="font-mono">Password: admin123</p>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@biscenic.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-              />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">Admin Login</h2>
+          <p className="mt-2 text-sm text-gray-600">Access the BISCENIC admin dashboard</p>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Sign in to your account</CardTitle>
+            <CardDescription>Use the demo credentials below to access the admin panel</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+              <h3 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials:</h3>
+              <p className="text-sm text-blue-700">
+                <strong>Email:</strong> admin@biscenic.com
+                <br />
+                <strong>Password:</strong> admin123
+              </p>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-              />
-            </div>
-            {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm text-center">
-                {error}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email address</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1"
+                  placeholder="Enter your email"
+                />
               </div>
-            )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </Button>
-          </form>
-          <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-            <Link className="underline" href="/">
-              Back to Home
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1"
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
