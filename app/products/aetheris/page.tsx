@@ -10,19 +10,6 @@ export default function AetherisProductPage() {
         <h1 className="text-5xl md:text-7xl font-light tracking-wider text-black">AETHERIS</h1>
       </section>
 
-      {/* Video Section */}
-      <section className="relative w-full h-[70vh] bg-black flex items-center justify-center">
-        <video
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/video-output-722E2F52-F4E1-4DB8-8D8B-BC36CCB34883%202-HCjwgc0grO1Xhk37i6IGV8KlrrX6bt.mp4" // Using an existing video for demonstration
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        ></video>
-        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"></div>
-      </section>
-
       {/* Image Section */}
       <section className="py-20 px-4 md:px-8 bg-gray-100">
         <div className="max-w-5xl mx-auto">
