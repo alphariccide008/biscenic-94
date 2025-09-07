@@ -18,20 +18,19 @@ export default function About() {
             <div>
               <h2 className="text-3xl font-light mb-6 tracking-wide">OUR HERITAGE</h2>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Biscenic is the hush within the hammer a stillness shaped by rhythm and reason. Technology does not interrupt here; it breathes life. Wood, once silent, begins to dream.
+                Biscenic is the hush within the hammer, a stillness shaped by rhythm and reason. Technology does not interrupt here; it breathes life. Wood, once silent, begins to dream.
                 Each creation is not built—it is born. It listens. It remembers. Through the quiet alchemy of design and code,
                 Biscenic gives form a spirit, turning furniture into vessels of memory, soul, and sentient beauty.
               </p>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Founded by visionary designer Lomon Christopher, Biscenic rose from a devotion to the deeper language of design—a relentless pursuit of artistry, precision, and emotional resonance. More than a design house, it is a living philosophy, an evolving reflection of how we shape our surroundings, and how they, in turn, shape us.
+                Founded by visionary designer Lomon Christopher, Biscenic rose from a devotion to the deeper language of design, a relentless pursuit of artistry, precision, and emotional resonance. More than a design house, it is a living philosophy, an evolving reflection of how we shape our surroundings, and how they, in turn, shape us.
               </p>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                We do not see furniture as static objects. 
-                To us, every line is a sentence. Every silhouette is a story.
-                Each piece is sculpted to stir something inward: a feeling, a memory, a truth once forgotten. With hands guided by intuition and minds attuned to innovation, we move beyond style and surface into substance.
+                We do not see furniture as static objects. To us, every line is a sentence. Every silhouette is a story. Each piece is sculpted to stir something inward: a feeling, a memory, a truth once forgotten. With hands guided by intuition and minds attuned to innovation, we move beyond style and surface into substance.
               </p>
               <p className="text-gray-700 leading-relaxed">
-                With every creation, Biscenic carries forward a legacy of bold imagination, furniture not simply designed to be seen or used, but to be felt, inhabited, and remembered.
+                With every creation, Biscenic carries forward a legacy of bold imagination, furniture not simply designed to be seen or used, but to be felt, inhabited, and remembered.
+
               </p>
             </div>
             <div className="relative aspect-square">
@@ -67,14 +66,12 @@ export default function About() {
               <div>
                 <h3 className="text-xl font-medium mb-4 tracking-wide">INNOVATION</h3>
                 <p className="text-gray-700">
-                  At Biscenic, We don't chase the future; we sculpt it.
-                  Our designs integrate subtle technology with soulful intention, giving rise to furniture that function and feels and  evolve with you, not in spite of you.
+                  Pushing the boundaries of fashion through cutting-edge design and technology.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-medium mb-4 tracking-wide">CRAFTSMANSHIP</h3>
-                <p className="text-gray-700">We treat every piece as a manuscript-written in grain, shaped in silence, signed in detail. Biscenic honors the artisan's hand while embracing the intelligence of modern tools. Every curve is considered. Every joint is a decision. Our craftsmanship is not mass-produced-it's soulfully engineered to outlive trend and time.
-</p>  
+                <p className="text-gray-700">Maintaining the highest standards of quality and attention to detail.</p>
               </div>
               <div>
                 <h3 className="text-xl font-medium mb-4 tracking-wide">SUSTAINABILITY</h3>
