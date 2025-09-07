@@ -64,16 +64,16 @@ export default function About() {
               <div>
                 <h3 className="text-xl font-medium mb-4 tracking-wide">INNOVATION</h3>
                 <p className="text-gray-700">
-                  Pushing the boundaries of fashion through cutting-edge design and technology.
+                  At Biscenic, we don't chase the future,we shape it. Our designs blend subtle technology with soulful intention, creating furniture that evolves with you.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-medium mb-4 tracking-wide">CRAFTSMANSHIP</h3>
-                <p className="text-gray-700">Maintaining the highest standards of quality and attention to detail.</p>
+                <p className="text-gray-700">At Biscenic, every piece is a manuscript—crafted in grain, refined in detail. We honor the artisan’s hand and modern tools, creating soulful designs built to outlive trends and time.</p>
               </div>
               <div>
                 <h3 className="text-xl font-medium mb-4 tracking-wide">SUSTAINABILITY</h3>
-                <p className="text-gray-700">Committed to responsible practices and environmental stewardship.</p>
+                <p className="text-gray-700">Biscenic builds with intention ethically sourced, enduring designs that honor nature and create beauty without scars.</p>
               </div>
             </div>
           </div>
