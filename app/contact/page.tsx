@@ -62,8 +62,6 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="bg-gray-50 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-        <Image src="/images/about-hero-bonsai.png" alt="Balenciaga Atelier" fill className="object-cover" />
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
           <h1 className="text-4xl md:text-6xl font-light mb-6 tracking-wider">CONTACT US</h1>
           <p className="text-gray-600 text-lg">We're here to assist you with any inquiries</p>
         </div>
@@ -205,5 +203,5 @@ export default function Contact() {
         </div>
       </section>
     </div>
-  }
+  )
 }
