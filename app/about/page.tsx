@@ -30,7 +30,6 @@ export default function About() {
               </p>
               <p className="text-gray-700 leading-relaxed">
                 With every creation, Biscenic carries forward a legacy of bold imagination, furniture not simply designed to be seen or used, but to be felt, inhabited, and remembered.
-
               </p>
             </div>
             <div className="relative aspect-square">
@@ -50,12 +49,11 @@ export default function About() {
             <div className="order-1 lg:order-2">
               <h2 className="text-3xl font-light mb-6 tracking-wide">MODERN VISION</h2>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Today, under the creative direction of Demna, Balenciaga continues to push boundaries while honoring its
+                Today, under the creative direction of Chris, Biscenic will continue to push boundaries while honoring its
                 founder's legacy of innovation and craftsmanship.
               </p>
               <p className="text-gray-700 leading-relaxed">
-                Our commitment to excellence extends beyond design to encompass sustainability, ethical practices, and a
-                vision for the future of luxury fashion.
+                Our commitment to excellence extends beyond design to encompass sustainability and a vision for the future at large.
               </p>
             </div>
           </div>
