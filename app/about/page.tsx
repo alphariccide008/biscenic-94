@@ -37,27 +37,6 @@ export default function About() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-            <div className="relative aspect-square order-2 lg:order-1">
-              <Image
-                src="/placeholder.svg?height=500&width=500"
-                alt="Modern Balenciaga"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="order-1 lg:order-2">
-              <h2 className="text-3xl font-light mb-6 tracking-wide">MODERN VISION</h2>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Today, under the creative direction of Chris, Biscenic will continue to push boundaries while honoring its
-                founder's legacy of innovation and craftsmanship.
-              </p>
-              <p className="text-gray-700 leading-relaxed">
-                Our commitment to excellence extends beyond design to encompass sustainability and a vision for the future at large.
-              </p>
-            </div>
-          </div>
-
           <div className="text-center">
             <h2 className="text-3xl font-light mb-8 tracking-wide">OUR VALUES</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
